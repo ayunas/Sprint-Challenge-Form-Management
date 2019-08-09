@@ -12,8 +12,15 @@ function generateToken(payload) {
   });
 }
 
-router.post('/register', function(req, res, next) {
-  console.log(req.body);
+router.get('/users', function (req, res) {
+  console.log('/registered endpoint hit');
+  // res.status(200).send('you have a lot of users');
+  db('users')
+    .then((users) => { console.log(users); res.status(200).send(users) })
+})
+
+router.post('/register', function (req, res, next) {
+  console.log('req.body', req.body);
   let { username, password } = req.body;
 
   if (!username || !password)
@@ -34,10 +41,10 @@ router.post('/register', function(req, res, next) {
         token
       });
     })
-    .catch(err => res.status(400).json({error:true, message:'Username is already taken'}));
+    .catch(err => res.status(400).json({ error: true, message: 'Username is already taken' }));
 });
 
-router.post('/login', function(req, res, next) {
+router.post('/login', function (req, res, next) {
   let { username, password } = req.body;
 
   if (!username || !password)
